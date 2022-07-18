@@ -10,4 +10,8 @@ const findUserById = async (userId) => UserModel.findByPk(userId);
 
 const findUserByUsername = async (username) => UserModel.findOne({ where: { username } });
 
-module.exports = { createUser, findUsers, findUserById, findUserByUsername };
+const updateUser = async (userId, update) => UserModel.update(update, { where: { id: userId } });
+
+const deleteUser = async (userId) => UserModel.destroy({ where: { id: userId } });
+
+module.exports = { createUser, findUsers, findUserById, findUserByUsername, updateUser, deleteUser };
