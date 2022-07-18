@@ -1,5 +1,7 @@
 const express = require('express');
 const db = require('./data/models/init');
+const APIError = require('./lib/errors/APIError');
+const routes = require('./routes');
 
 require('dotenv').config();
 
@@ -9,14 +11,16 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use('/', routes);
+
 // eslint-disable-next-line no-unused-vars
 app.use((req, res, next) => res.status(404).json({ error: 'Resource Not Found' }));
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
-  console.error(`Error processing request ${err}. See next message for details`);
-  console.error(err.message);
-
+  if (err instanceof APIError) {
+    return res.status(err.status).json({ status: err.message });
+  }
   return res.status(500).json({ error: 'Internal Server Error' });
 });
 
