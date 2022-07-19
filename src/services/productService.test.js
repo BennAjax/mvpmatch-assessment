@@ -6,17 +6,19 @@ const BadRequestError = require('../lib/errors/BadRequestError');
 jest.mock('../data/repository/productRepository');
 
 describe('productService', () => {
+  const user = { id: 2, username: 'shalomite', role: 'seller' };
+
   describe('createProduct', () => {
     const product = {
       amountAvailable: 4,
       cost: 50,
       productName: 'Fanta',
-      sellerId: 1,
+      sellerId: 2,
     };
 
     test('should throw Invalid Argument', async () => {
       try {
-        await productService.createProduct(2, 10, '', 1);
+        await productService.createProduct(user, 2, 10, '', 1);
       } catch (e) {
         expect(e).toBeInstanceOf(Error);
         expect(e.message).toBe(INVALID_ARGUMENT);
@@ -30,6 +32,7 @@ describe('productService', () => {
 
       try {
         await productService.createProduct(
+          user,
           product.amountAvailable,
           product.cost,
           product.productName,
@@ -43,7 +46,13 @@ describe('productService', () => {
 
     test('should create a product', async () => {
       productRepository.findProductByName.mockImplementation(() => null);
-      await productService.createProduct(product.amountAvailable, product.cost, product.productName, product.sellerId);
+      await productService.createProduct(
+        user,
+        product.amountAvailable,
+        product.cost,
+        product.productName,
+        product.sellerId
+      );
 
       expect(productRepository.createProduct).toBeCalledTimes(1);
       expect(productRepository.createProduct).toBeCalledWith(
@@ -108,7 +117,7 @@ describe('productService', () => {
   describe('updateProduct', () => {
     test('should throw Invalid Argument', async () => {
       try {
-        await productService.updateProduct();
+        await productService.updateProduct(user);
       } catch (e) {
         expect(e).toBeInstanceOf(Error);
         expect(e.message).toBe(INVALID_ARGUMENT);
@@ -116,8 +125,10 @@ describe('productService', () => {
     });
 
     test('should throw No Update Arguments', async () => {
+      productRepository.findProductById.mockImplementation(() => ({ sellerId: 2 }));
+
       try {
-        await productService.updateProduct(1, null);
+        await productService.updateProduct(user, 1, null);
       } catch (e) {
         expect(e).toBeInstanceOf(BadRequestError);
         expect(e.message).toBe(NO_UPDATE_ARGUMENT);
@@ -126,13 +137,14 @@ describe('productService', () => {
 
     test('should update a product', async () => {
       productRepository.updateProduct.mockImplementation(() => null);
+      productRepository.findProductById.mockImplementation(() => ({ sellerId: 2 }));
 
       const product = {
         id: 3,
         amountAvailable: 2,
       };
 
-      await productService.updateProduct(product.id, product.amountAvailable);
+      await productService.updateProduct(user, product.id, product.amountAvailable);
       expect(productRepository.updateProduct).toBeCalledTimes(1);
       expect(productRepository.updateProduct).toBeCalledWith(product.id, { amountAvailable: product.amountAvailable });
     });
@@ -141,7 +153,7 @@ describe('productService', () => {
   describe('deleteProduct', () => {
     test('should throw Invalid Argument', async () => {
       try {
-        await productService.deleteProduct();
+        await productService.deleteProduct(user);
       } catch (e) {
         expect(e).toBeInstanceOf(Error);
         expect(e.message).toBe(INVALID_ARGUMENT);
@@ -150,12 +162,13 @@ describe('productService', () => {
 
     test('should delete a product', async () => {
       productRepository.deleteProduct.mockImplementation(() => null);
+      productRepository.findProductById.mockImplementation(() => ({ sellerId: 2 }));
 
       const product = {
         id: 3,
       };
 
-      await productService.deleteProduct(product.id);
+      await productService.deleteProduct(user, product.id);
       expect(productRepository.deleteProduct).toBeCalledTimes(1);
       expect(productRepository.deleteProduct).toBeCalledWith(product.id);
     });

@@ -21,6 +21,7 @@ app.use((err, req, res, next) => {
   if (err instanceof APIError) {
     return res.status(err.status).json({ status: err.message });
   }
+  console.log(err.message)
   return res.status(500).json({ error: 'Internal Server Error' });
 });
 

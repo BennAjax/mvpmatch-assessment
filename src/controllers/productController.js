@@ -2,7 +2,7 @@ const productService = require('../services/productService');
 
 const createProduct = (req, res, next) =>
   productService
-    .createProduct(req.body.amountAvailable, req.body.cost, req.body.productName, req.body.sellerId)
+    .createProduct(req.user, req.body.amountAvailable, req.body.cost, req.body.productName, req.body.sellerId)
     .then(() => res.status(201).json({ status: 'Successful' }))
     .catch((err) => next(err));
 
@@ -29,13 +29,13 @@ const getProducts = async (req, res, next) => {
 
 const updateProduct = (req, res, next) =>
   productService
-    .updateProduct(req.params.id, req.body.amountAvailable, req.body.cost, req.body.productName)
+    .updateProduct(req.user, req.params.id, req.body.amountAvailable, req.body.cost, req.body.productName)
     .then(() => res.status(200).json({ status: 'Successful' }))
     .catch((err) => next(err));
 
 const deleteProduct = (req, res, next) =>
   productService
-    .deleteProduct(req.params.id)
+    .deleteProduct(req.user, req.params.id)
     .then(() => res.status(200).json({ status: 'Successful' }))
     .catch((err) => next(err));
 

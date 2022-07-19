@@ -3,6 +3,7 @@ const userRepository = require('../data/repository/userRepository');
 const BadRequestError = require('../lib/errors/BadRequestError');
 const InternalError = require('../lib/errors/InternalError');
 const NotFoundError = require('../lib/errors/NotFoundError');
+const { createToken } = require('../lib/jwt');
 const {
   USERNAME_EXIST,
   INVALID_ARGUMENT,
@@ -11,6 +12,7 @@ const {
   NO_UPDATE_ARGUMENT,
   USER_UPDATE_ERROR,
   USER_DELETE_ERROR,
+  INVALID_CREDENTIALS,
 } = require('../lib/constants');
 
 const SALT_WORK_FACTOR = 10;
@@ -24,6 +26,16 @@ const generateHash = async (password) => {
   } catch (e) {
     throw new Error(e.message);
   }
+};
+
+const login = async (username, password) => {
+  const user = await userRepository.findUserByUsername(username);
+  if (!user) throw new BadRequestError(INVALID_CREDENTIALS);
+
+  const passwordMatch = await bcrypt.compare(password, user.password);
+  if (!passwordMatch) throw new BadRequestError(INVALID_CREDENTIALS);
+
+  return createToken(user.id, user.role, user.username);
 };
 
 const createUser = async (username, password, role) => {
@@ -97,4 +109,4 @@ const deleteUser = async (userId) => {
   }
 };
 
-module.exports = { generateHash, createUser, getUsers, getUserById, updateUser, deleteUser };
+module.exports = { generateHash, login, createUser, getUsers, getUserById, updateUser, deleteUser };

@@ -3,6 +3,7 @@ const PRODUCTNAME_EXIST = 'ProductName already exist';
 
 const INVALID_ARGUMENT = 'Invalid arguments provided';
 const NO_UPDATE_ARGUMENT = 'No update arguments provided';
+const INVALID_CREDENTIALS = 'Invalid credentials';
 
 const USER_CREATION_ERROR = 'An error occurred while trying to create user';
 const USER_UPDATE_ERROR = 'An error occurred while trying to update user';
@@ -13,6 +14,11 @@ const PRODUCT_CREATION_ERROR = 'An error occurred while trying to create product
 const PRODUCT_UPDATE_ERROR = 'An error occurred while trying to update product';
 const PRODUCT_DELETE_ERROR = 'An error occurred while trying to delete product';
 const PRODUCT_NOT_FOUND = 'Product not found';
+
+const BUYER = 'buyer';
+const SELLER = 'seller';
+
+const UNAUTHORIZED_PRODUCT = 'You are unauthorized for this product';
 
 module.exports = {
   USERNAME_EXIST,
@@ -27,4 +33,8 @@ module.exports = {
   PRODUCT_UPDATE_ERROR,
   PRODUCT_DELETE_ERROR,
   PRODUCT_NOT_FOUND,
+  INVALID_CREDENTIALS,
+  BUYER,
+  SELLER,
+  UNAUTHORIZED_PRODUCT,
 };

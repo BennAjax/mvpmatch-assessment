@@ -1,5 +1,11 @@
 const userService = require('../services/userService');
 
+const login = (req, res, next) =>
+  userService
+    .login(req.body.username, req.body.password)
+    .then((token) => res.status(200).json({ token }))
+    .catch((err) => next(err));
+
 const createUser = (req, res, next) =>
   userService
     .createUser(req.body.username, req.body.password, req.body.role)
@@ -32,4 +38,4 @@ const deleteUser = (req, res, next) =>
     .then(() => res.status(200).json({ status: 'Successful' }))
     .catch((err) => next(err));
 
-module.exports = { createUser, getUsers, updateUser, deleteUser };
+module.exports = { login, createUser, getUsers, updateUser, deleteUser };

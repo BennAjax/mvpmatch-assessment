@@ -2,6 +2,7 @@ const productRepository = require('../data/repository/productRepository');
 const BadRequestError = require('../lib/errors/BadRequestError');
 const InternalError = require('../lib/errors/InternalError');
 const NotFoundError = require('../lib/errors/NotFoundError');
+const UnauthorizedError = require('../lib/errors/UnauthorizedError');
 const {
   INVALID_ARGUMENT,
   PRODUCTNAME_EXIST,
@@ -10,10 +11,14 @@ const {
   PRODUCT_UPDATE_ERROR,
   PRODUCT_DELETE_ERROR,
   PRODUCT_NOT_FOUND,
+  SELLER,
+  UNAUTHORIZED_PRODUCT,
 } = require('../lib/constants');
 
-const createProduct = async (amountAvailable, cost, productName, sellerId) => {
+const createProduct = async (user, amountAvailable, cost, productName, sellerId) => {
   if (!amountAvailable || !cost || !productName || !sellerId) throw new Error(INVALID_ARGUMENT);
+
+  if (user.role !== SELLER || user.id !== sellerId) throw new UnauthorizedError(UNAUTHORIZED_PRODUCT);
 
   const existingProduct = await productRepository.findProductByName(productName);
   if (existingProduct) throw new BadRequestError(PRODUCTNAME_EXIST);
@@ -49,8 +54,13 @@ const getProductsBySellerId = async (sellerId) => {
   return productRepository.findProductsBySellerId(sellerId);
 };
 
-const updateProduct = async (productId, amountAvailable, cost, productName) => {
+const updateProduct = async (user, productId, amountAvailable, cost, productName) => {
   if (!productId) throw new Error(INVALID_ARGUMENT);
+
+  const product = await productRepository.findProductById(productId);
+  if (!product) throw new NotFoundError(PRODUCT_NOT_FOUND);
+
+  if (user.role !== SELLER || user.id !== product.sellerId) throw new UnauthorizedError(UNAUTHORIZED_PRODUCT);
 
   const update = {
     amountAvailable,
@@ -69,8 +79,13 @@ const updateProduct = async (productId, amountAvailable, cost, productName) => {
   }
 };
 
-const deleteProduct = async (productId) => {
+const deleteProduct = async (user, productId) => {
   if (!productId) throw new Error(INVALID_ARGUMENT);
+
+  const product = await productRepository.findProductById(productId);
+  if (!product) throw new NotFoundError(PRODUCT_NOT_FOUND);
+
+  if (user.role !== SELLER || user.id !== product.sellerId) throw new UnauthorizedError(UNAUTHORIZED_PRODUCT);
 
   try {
     await productRepository.deleteProduct(productId);
