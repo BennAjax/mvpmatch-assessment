@@ -2,8 +2,8 @@ const httpStatus = require('http-status');
 const APIError = require('./APIError');
 
 class BadRequestError extends APIError {
-  constructor(message) {
-    super(message, httpStatus.BAD_REQUEST);
+  constructor(message, meta) {
+    super(message, httpStatus.BAD_REQUEST, meta);
   }
 }
 

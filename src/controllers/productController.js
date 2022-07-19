@@ -1,11 +1,11 @@
 const productService = require('../services/productService');
 
-const createProduct = (req, res, next) =>
+const createProduct = (req, res, next) =>{ console.log(req.body)
   productService
     .createProduct(req.user, req.body.amountAvailable, req.body.cost, req.body.productName, req.body.sellerId)
     .then(() => res.status(201).json({ status: 'Successful' }))
     .catch((err) => next(err));
-
+}
 const getProducts = async (req, res, next) => {
   if (req.params.id) {
     return productService

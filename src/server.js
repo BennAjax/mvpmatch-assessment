@@ -19,9 +19,9 @@ app.use((req, res, next) => res.status(404).json({ error: 'Resource Not Found' }
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   if (err instanceof APIError) {
-    return res.status(err.status).json({ status: err.message });
+    return res.status(err.status).json({ status: err.message, details: err.meta });
   }
-  console.log(err.message)
+  console.log(err.message);
   return res.status(500).json({ error: 'Internal Server Error' });
 });
 
