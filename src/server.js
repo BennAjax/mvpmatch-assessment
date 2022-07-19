@@ -24,7 +24,7 @@ app.use((err, req, res, next) => {
   return res.status(500).json({ error: 'Internal Server Error' });
 });
 
-db.sequelize.sync();
+db.sequelize.sync({ force: false });
 
 const server = app.listen(PORT, () => {
   console.log(`Server Running on Port ${PORT}`);
