@@ -76,7 +76,7 @@ const updateUser = async (userId, username, password, role) => {
     role,
   };
 
-  Object.keys(update).forEach((key) => update[key] === undefined && delete update[key]);
+  Object.keys(update).forEach((key) => (update[key] === undefined || update[key] === null) && delete update[key]);
 
   if (Object.keys(update).length === 0) throw new BadRequestError(NO_UPDATE_ARGUMENT);
 

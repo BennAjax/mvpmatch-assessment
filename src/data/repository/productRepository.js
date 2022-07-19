@@ -8,7 +8,7 @@ const findProducts = async () => ProductModel.findAll();
 
 const findProductById = async (productId) => ProductModel.findByPk(productId);
 
-const findProductsByName = async (productName) => ProductModel.findAll({ where: { productName } });
+const findProductByName = async (productName) => ProductModel.findOne({ where: { productName } });
 
 const findProductsBySellerId = async (sellerId) => ProductModel.findAll({ where: { sellerId } });
 
@@ -20,7 +20,7 @@ module.exports = {
   createProduct,
   findProducts,
   findProductById,
-  findProductsByName,
+  findProductByName,
   findProductsBySellerId,
   updateProduct,
   deleteProduct,

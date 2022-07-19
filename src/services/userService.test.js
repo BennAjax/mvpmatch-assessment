@@ -102,7 +102,7 @@ describe('User Service', () => {
   describe('updateUser', () => {
     test('should throw Invalid Argument', async () => {
       try {
-        await userService.getUserById();
+        await userService.updateUser();
       } catch (e) {
         expect(e).toBeInstanceOf(Error);
         expect(e.message).toBe(INVALID_ARGUMENT);
@@ -111,7 +111,7 @@ describe('User Service', () => {
 
     test('should throw No Update Arguments', async () => {
       try {
-        await userService.getUserById(1, null);
+        await userService.updateUser(1, null);
       } catch (e) {
         expect(e).toBeInstanceOf(BadRequestError);
         expect(e.message).toBe(NO_UPDATE_ARGUMENT);

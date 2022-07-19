@@ -23,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       sellerId: {
         type: DataTypes.INTEGER,
+        autoIncrement: false,
         allowNull: false,
       },
     },
@@ -38,8 +39,9 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   Product.belongsTo(User(sequelize, DataTypes), {
-    foreignKey: 'id',
-    targerKey: 'sellerId',
+    foreignKey: 'sellerId',
+    targetKey: 'id',
+    onDelete: 'CASCADE',
   });
 
   return Product;
