@@ -48,10 +48,9 @@ const depositCoin = async (user, coin) => {
 
   if (user.role !== BUYER) throw new UnauthorizedError(UNAUTHORIZED_DEPOSIT);
 
-  const update = { deposit: coin };
-
   try {
-    await userRepository.updateUser(user.id, update);
+    const dbUser = await userRepository.findUserById(user.id);
+    await dbUser.increment('deposit', { by: coin });
   } catch (e) {
     throw new InternalError(DEPOSIT_ERROR);
   }

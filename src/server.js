@@ -1,9 +1,8 @@
+require('dotenv').config();
 const express = require('express');
 const db = require('./data/models/init');
 const APIError = require('./lib/errors/APIError');
 const routes = require('./routes');
-
-require('dotenv').config();
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -28,7 +27,7 @@ app.use((err, req, res, next) => {
 db.sequelize.sync({ force: false });
 
 const server = app.listen(PORT, () => {
-  console.log(`Server Running on Port ${PORT}`);
+  if (!process.env.TEST) console.log(`Server Running on Port ${PORT}`);
 });
 
-module.exports = { server };
+module.exports = server;

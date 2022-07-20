@@ -5,7 +5,7 @@
   "main": "./src/server.js",
   "scripts": {
     "start": "node ./src/server.js",
-    "test": "TEST=1 jest --detectOpenHandles --forceExit",
+    "test": "TEST=1 jest --runInBand --detectOpenHandles --forceExit",
     "coverage": "jest --coverage"
   },
   "keywords": [],
@@ -14,7 +14,7 @@
   "jest": {
     "testEnvironment": "node",
     "testPathIgnorePatterns": [
-      "/node_modules/"
+      "/node_modules/", "/src/__tests__"
     ],
     "setupFiles": [
       "dotenv/config"

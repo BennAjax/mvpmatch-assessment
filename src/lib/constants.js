@@ -20,9 +20,14 @@ const SELLER = 'seller';
 
 const UNAUTHORIZED_PRODUCT = 'You are unauthorized for this product';
 const UNAUTHORIZED_DEPOSIT = 'You are unauthorized to make deposit';
+const UNAUTHORIZED_BUY = 'You are unauthorized to buy, use a buyer role account';
 
 const DEPOSIT_ERROR = 'An error occurred while trying to make deposit';
 const DEPOSIT_RESET_ERROR = 'An error occurred while trying to reset deposit';
+const BUY_ERROR = 'An error occurred while trying to buy';
+
+const INSUFFICIENT_DEPOSIT = 'Insufficient Deposit';
+const INSUFFICIENT_AMOUNT = 'Insufficient Amount';
 
 module.exports = {
   USERNAME_EXIST,
@@ -44,4 +49,8 @@ module.exports = {
   UNAUTHORIZED_DEPOSIT,
   DEPOSIT_ERROR,
   DEPOSIT_RESET_ERROR,
+  UNAUTHORIZED_BUY,
+  INSUFFICIENT_DEPOSIT,
+  INSUFFICIENT_AMOUNT,
+  BUY_ERROR,
 };
