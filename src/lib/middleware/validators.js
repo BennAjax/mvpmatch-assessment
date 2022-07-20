@@ -9,6 +9,12 @@ const login = validate({
   },
 });
 
+const deposit = validate({
+  body: {
+    coin: Joi.number().valid(5, 10, 20, 50, 100).required(),
+  },
+});
+
 const getUsersById = validate({
   params: {
     id: Joi.number(),
@@ -74,6 +80,7 @@ const deleteProduct = validate({
 
 module.exports = {
   login,
+  deposit,
   getUsersById,
   createUser,
   updateUser,

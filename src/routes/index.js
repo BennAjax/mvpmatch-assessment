@@ -4,6 +4,7 @@ const productController = require('../controllers/productController');
 const { verifyToken } = require('../lib/jwt');
 const {
   login,
+  deposit,
   getUsersById,
   createUser,
   updateUser,
@@ -24,6 +25,8 @@ const health = (req, res) => {
 router.get('/health', health);
 
 router.post('/login', login, userController.login);
+router.post('/deposit', [verifyToken, deposit], userController.depositCoin);
+router.post('/reset', verifyToken, userController.resetDeposit);
 
 router.get('/users/:id?', [verifyToken, getUsersById], userController.getUsers);
 router.post('/users', createUser, userController.createUser);

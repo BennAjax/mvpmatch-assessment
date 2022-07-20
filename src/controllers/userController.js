@@ -6,6 +6,18 @@ const login = (req, res, next) =>
     .then((token) => res.status(200).json({ token }))
     .catch((err) => next(err));
 
+const depositCoin = (req, res, next) =>
+  userService
+    .depositCoin(req.user, req.body.coin)
+    .then(() => res.status(201).json({ status: 'Successful' }))
+    .catch((err) => next(err));
+
+const resetDeposit = (req, res, next) =>
+  userService
+    .resetDeposit(req.user)
+    .then(() => res.status(200).json({ status: 'Successful' }))
+    .catch((err) => next(err));
+
 const createUser = (req, res, next) =>
   userService
     .createUser(req.body.username, req.body.password, req.body.role)
@@ -38,4 +50,4 @@ const deleteUser = (req, res, next) =>
     .then(() => res.status(200).json({ status: 'Successful' }))
     .catch((err) => next(err));
 
-module.exports = { login, createUser, getUsers, updateUser, deleteUser };
+module.exports = { login, depositCoin, resetDeposit, createUser, getUsers, updateUser, deleteUser };

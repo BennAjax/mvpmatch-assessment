@@ -1,9 +1,10 @@
 const bcrypt = require('bcryptjs');
+const { createToken } = require('../lib/jwt');
 const userRepository = require('../data/repository/userRepository');
 const BadRequestError = require('../lib/errors/BadRequestError');
 const InternalError = require('../lib/errors/InternalError');
 const NotFoundError = require('../lib/errors/NotFoundError');
-const { createToken } = require('../lib/jwt');
+const UnauthorizedError = require('../lib/errors/UnauthorizedError');
 const {
   USERNAME_EXIST,
   INVALID_ARGUMENT,
@@ -13,6 +14,10 @@ const {
   USER_UPDATE_ERROR,
   USER_DELETE_ERROR,
   INVALID_CREDENTIALS,
+  BUYER,
+  UNAUTHORIZED_DEPOSIT,
+  DEPOSIT_ERROR,
+  DEPOSIT_RESET_ERROR,
 } = require('../lib/constants');
 
 const SALT_WORK_FACTOR = 10;
@@ -36,6 +41,32 @@ const login = async (username, password) => {
   if (!passwordMatch) throw new BadRequestError(INVALID_CREDENTIALS);
 
   return createToken(user.id, user.role, user.username);
+};
+
+const depositCoin = async (user, coin) => {
+  if (!coin) throw new Error(INVALID_ARGUMENT);
+
+  if (user.role !== BUYER) throw new UnauthorizedError(UNAUTHORIZED_DEPOSIT);
+
+  const update = { deposit: coin };
+
+  try {
+    await userRepository.updateUser(user.id, update);
+  } catch (e) {
+    throw new InternalError(DEPOSIT_ERROR);
+  }
+};
+
+const resetDeposit = async (user) => {
+  if (user.role !== BUYER) throw new UnauthorizedError(UNAUTHORIZED_DEPOSIT);
+
+  const update = { deposit: 0 };
+
+  try {
+    await userRepository.updateUser(user.id, update);
+  } catch (e) {
+    throw new InternalError(DEPOSIT_RESET_ERROR);
+  }
 };
 
 const createUser = async (username, password, role) => {
@@ -109,4 +140,14 @@ const deleteUser = async (userId) => {
   }
 };
 
-module.exports = { generateHash, login, createUser, getUsers, getUserById, updateUser, deleteUser };
+module.exports = {
+  generateHash,
+  login,
+  depositCoin,
+  resetDeposit,
+  createUser,
+  getUsers,
+  getUserById,
+  updateUser,
+  deleteUser,
+};

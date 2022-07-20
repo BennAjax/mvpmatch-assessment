@@ -19,6 +19,10 @@ const BUYER = 'buyer';
 const SELLER = 'seller';
 
 const UNAUTHORIZED_PRODUCT = 'You are unauthorized for this product';
+const UNAUTHORIZED_DEPOSIT = 'You are unauthorized to make deposit';
+
+const DEPOSIT_ERROR = 'An error occurred while trying to make deposit';
+const DEPOSIT_RESET_ERROR = 'An error occurred while trying to reset deposit';
 
 module.exports = {
   USERNAME_EXIST,
@@ -37,4 +41,7 @@ module.exports = {
   BUYER,
   SELLER,
   UNAUTHORIZED_PRODUCT,
+  UNAUTHORIZED_DEPOSIT,
+  DEPOSIT_ERROR,
+  DEPOSIT_RESET_ERROR,
 };
